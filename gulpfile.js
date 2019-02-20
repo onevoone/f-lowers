@@ -1,14 +1,11 @@
 var gulp = require('gulp'),
 	browserSync = require('browser-sync'),
 	concat = require('gulp-concat'),
-	uglify = require('gulp-uglify'),
-	rsync = require('gulp-rsync');
+	uglify = require('gulp-uglify');
 
 gulp.task('browser-sync', function () {
 	browserSync({
-		server: {
-			baseDir: 'app'
-		},
+		server: true,
 		notify: false,
 		// open: false,
 		// online: false, // Work Offline Without Internet Connection
@@ -18,41 +15,26 @@ gulp.task('browser-sync', function () {
 
 gulp.task('scripts', function () {
 	return gulp.src([
-		'app/libs/threejs/three.js',
-		'app/libs/threejs/OBJLoader.js',
-		'app/libs/threejs/AsciiEffect.js',
-		'app/libs/threejs/TrackballControls.js',
-		'app/js/common.js', // Always at the end
+		'libs/threejs/three.js',
+		'libs/threejs/OBJLoader.js',
+		'libs/threejs/AsciiEffect.js',
+		'libs/threejs/TrackballControls.js',
+		'js/common.js', // Always at the end
 	])
 		.pipe(concat('scripts.min.js'))
 		// .pipe(uglify()) // Mifify js (opt.)
-		.pipe(gulp.dest('app/js'))
+		.pipe(gulp.dest('js'))
 		.pipe(browserSync.reload({ stream: true }))
 });
 
 gulp.task('code', function () {
-	return gulp.src('app/*.html')
+	return gulp.src('/*.html')
 		.pipe(browserSync.reload({ stream: true }))
 });
 
-gulp.task('rsync', function () {
-	return gulp.src('app/**')
-		.pipe(rsync({
-			root: 'app/',
-			hostname: 'username@yousite.com',
-			destination: 'yousite/public_html/',
-			// include: ['*.htaccess'], // Includes files to deploy
-			exclude: ['**/Thumbs.db', '**/*.DS_Store'], // Excludes files from deploy
-			recursive: true,
-			archive: true,
-			silent: false,
-			compress: true
-		}))
-});
-
 gulp.task('watch', function () {
-	gulp.watch(['libs/**/*.js', 'app/js/common.js'], gulp.parallel('scripts'));
-	gulp.watch('app/*.html', gulp.parallel('code'))
+	gulp.watch(['libs/**/*.js', 'js/common.js'], gulp.parallel('scripts'));
+	gulp.watch('index.html', gulp.parallel('code'))
 });
 
 gulp.task('default', gulp.parallel('scripts', 'browser-sync', 'watch'));
