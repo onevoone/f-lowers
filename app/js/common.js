@@ -48,7 +48,7 @@ function init() {
 	}
 	
 	var loader = new THREE.OBJLoader();
-	loader.load('/app/assets/tulip_flower.obj', function (tulip) {
+	loader.load('assets/tulip_flower.obj', function (tulip) {
 		removePreLoader();
 
 		object = tulip;
