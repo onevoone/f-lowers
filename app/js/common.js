@@ -1,12 +1,11 @@
 var camera, scene, renderer, effect, controls;
 var start = Date.now();
-var object = {};
+var object;
 
 var width = window.innerWidth;
 var height = window.innerHeight;
 
 var loader;
-var preloader = document.getElementById('preloader');
 
 // set
 
@@ -49,7 +48,7 @@ function init() {
 	}
 	
 	var loader = new THREE.OBJLoader();
-	loader.load('assets/tulip_flower.obj', function (tulip) {
+	loader.load('../assets/tulip_flower.obj', function (tulip) {
 		removePreLoader();
 
 		object = tulip;
@@ -60,7 +59,7 @@ function init() {
 		object.rotation.x = -1;
 		scene.add(object);
 
-		animate()
+		animate();
 
 	}, onProgress, onError);
 
@@ -86,22 +85,21 @@ function onWindowResize() {
 function animate() {
 
 	requestAnimationFrame(animate);
-	render();
+
+	object && render();
 }
 
 function render() {
 	var timer = Date.now() - start;
 
-	// if (object && object.rotation) {
-		object.rotation.z = timer * 0.0008;
+	object.rotation.z = timer * 0.0008;
 
-		controls.update();
-	
-		effect.render(scene, camera);
-	// }
-	// return;
+	controls.update();
+
+	effect.render(scene, camera);
 }
 
 function removePreLoader() {
+	var preloader = document.getElementById('preloader');
 	document.body.removeChild(preloader);
 }
